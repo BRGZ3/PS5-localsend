@@ -1,5 +1,8 @@
 # PS5 LocalSend
 
+<p align="center">
+  <img src="localsend.png" width="1664" height="833" alt="PS5 localsend">
+</p>
 PS5 LocalSend is a local-network file receiver for jailbroken PlayStation 5
 systems. The ELF starts a web server on the console. Open its address from a
 phone or computer to send files directly to a configured PS5 storage folder.
