@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#080b12">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'none'; form-action 'self'; connect-src 'self' http://*:*; img-src 'self'; style-src 'self'; script-src 'self'"
+    >
+    <meta name="referrer" content="no-referrer">
+    <title>PS5 LocalSend</title>
+    <link rel="stylesheet" href="/assets/app.css">
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content" data-i18n="skip">Skip to main content</a>
+
+    <div class="app-shell">
+      <header class="topbar" aria-label="PS5 LocalSend">
+        <a class="brand" href="/" aria-label="PS5 LocalSend home" data-i18n-aria-label="home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span>
+          </span>
+          <span class="brand-copy">
+            <strong>PS5</strong>
+            <span>LOCAL SEND</span>
+          </span>
+        </a>
+
+        <div class="connection-pill" id="connection-pill" data-state="checking" role="status">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span id="connection-label" data-i18n="checkingServer">Checking server</span>
+        </div>
+      </header>
+
+      <main id="main-content">
+        <section class="hero" aria-label="Local receiver" data-i18n-aria-label="localReceiver">
+          <div class="eyebrow"><span aria-hidden="true">01</span> <span data-i18n="localReceiver">Local receiver</span></div>
+          <p class="hero-copy" data-i18n="heroCopy">
+            No cloud or app installation. Open this page on a phone or computer
+            connected to the same network and confirm the PIN shown by the PS5.
+          </p>
+
+          <div class="lan-note" role="note">
+            <span class="lan-note-icon" aria-hidden="true">LAN</span>
+            <p>
+              <strong data-i18n="trustedLan">Trusted local network only.</strong>
+              <span data-i18n="lanWarning">The connection uses unencrypted HTTP. Do not transfer files over guest or public Wi-Fi.</span>
+            </p>
+          </div>
+        </section>
+
+        <section class="receiver-panel" aria-labelledby="receiver-title">
+          <div class="receiver-visual" aria-hidden="true">
+            <span class="signal-ring signal-ring-outer"></span>
+            <span class="signal-ring signal-ring-inner"></span>
+            <img class="console-image" src="/assets/ps5-console.png" alt="">
+          </div>
+
+          <div class="receiver-content">
+            <div class="section-kicker" data-i18n="serverStatus">Server status</div>
+            <h2 id="receiver-title" data-i18n="waitingConnection">PS5 is waiting for a connection</h2>
+            <p id="server-summary" class="muted" aria-live="polite" data-i18n="loadingReceiver">
+              Loading receiver information…
+            </p>
+
+            <div class="receiver-transfer" id="receiver-transfer" hidden aria-live="polite">
+              <div class="receiver-transfer-head">
+                <strong id="receiver-transfer-name" data-i18n="receivingFile">Receiving file</strong>
+                <span id="receiver-transfer-state" data-i18n="preparing">Preparing…</span>
+              </div>
+              <progress id="receiver-transfer-progress" max="100" value="0"
+                        aria-label="File receive progress" data-i18n-aria-label="receiveProgress"></progress>
+              <span class="receiver-transfer-meta" id="receiver-transfer-meta">
+                0 B of 0 B
+              </span>
+            </div>
+
+            <dl class="status-grid" aria-label="Receiver details" data-i18n-aria-label="receiverDetails">
+              <div>
+                <dt data-i18n="address">Address</dt>
+                <dd id="server-address">—</dd>
+              </div>
+              <div>
+                <dt data-i18n="version">Version</dt>
+                <dd id="server-version">—</dd>
+              </div>
+              <div>
+                <dt data-i18n="protection">Protection</dt>
+                <dd id="server-auth">PIN</dd>
+              </div>
+              <div>
+                <dt data-i18n="fileLimit">File limit</dt>
+                <dd id="server-limit">—</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <div class="flow-heading" aria-hidden="true">
+          <span data-i18n="connection">Connection</span>
+          <span class="flow-line"></span>
+          <span data-i18n="twoSteps">2 steps</span>
+        </div>
+
+        <div class="transfer-flow">
+          <section class="step-card step-card-pin" id="pin-card" aria-labelledby="pin-title">
+            <header class="step-header">
+              <span class="step-number" aria-hidden="true">01</span>
+              <span class="availability-label" id="pin-state-label" data-i18n="available">Available</span>
+            </header>
+            <h2 id="pin-title" data-i18n="confirmPin">Confirm PIN</h2>
+            <p data-i18n="pinInstructions">
+              Request a PIN from your phone or computer. Enter the six digits
+              shown in the PS5 notification to authorize this browser.
+            </p>
+
+            <button class="primary-button" id="request-pin" type="button">
+              <span data-i18n="requestPin">Request PIN on PS5</span>
+            </button>
+
+            <form id="pin-form" hidden novalidate>
+              <div class="pin-fields" aria-label="Six-digit PIN" data-i18n-aria-label="sixDigitPin">
+                <label class="sr-only" for="pin-code" data-i18n="sixDigitPin">Six-digit PIN</label>
+                <input id="pin-code" aria-describedby="pin-message" aria-label="Six-digit PIN" data-i18n-aria-label="sixDigitPin" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6">
+              </div>
+              <button class="primary-button" id="verify-pin" type="submit">
+                <span data-i18n="confirmPin">Confirm PIN</span>
+              </button>
+            </form>
+            <p class="stage-note" id="pin-message" role="status">
+              <span data-i18n="pinWillAppear">The PIN will appear in a PS5 notification.</span>
+            </p>
+          </section>
+
+          <section class="step-card step-card-files" id="files-card" aria-labelledby="files-title" aria-disabled="true">
+            <header class="step-header">
+              <span class="step-number" aria-hidden="true">02</span>
+              <span class="locked-label" id="files-state-label">
+                <span aria-hidden="true">●</span> <span data-i18n="pinRequired">PIN required</span>
+              </span>
+            </header>
+            <h2 id="files-title" data-i18n="chooseFiles">Choose files</h2>
+            <p data-i18n="filesInstructions">
+              Select files after authorization. They are sent sequentially and
+              directly from the browser without packaging.
+            </p>
+
+            <div class="storage-control" id="storage-control" data-state="internal"
+                 aria-disabled="true">
+              <div class="storage-copy">
+                <span class="section-kicker" data-i18n="storage">Storage</span>
+                <strong id="storage-label">Internal storage</strong>
+                <span id="storage-path">/data/ps5localsend/inbox</span>
+              </div>
+              <label class="storage-select-label">
+                <span class="sr-only" data-i18n="selectDestination">Select destination folder</span>
+                <select id="storage-select" disabled aria-label="Destination folder" data-i18n-aria-label="destinationFolder">
+                  <option value="internal">Internal storage</option>
+                  <option value="usb">USB drive</option>
+                </select>
+              </label>
+            </div>
+            <p class="stage-note" id="storage-message" role="status">
+              <span data-i18n="foldersConfigured">Available folders are configured in config.ini on the PS5.</span>
+            </p>
+
+            <input id="file-input" class="sr-only" type="file" multiple disabled>
+            <label class="drop-zone" id="drop-zone" for="file-input" aria-disabled="true" tabindex="-1">
+              <span class="drop-icon" aria-hidden="true">
+                <span></span>
+              </span>
+              <strong data-i18n="selectOrDrop">Select or drop files</strong>
+              <span data-i18n="filesQueued">Files will be added to a sequential queue.</span>
+            </label>
+
+            <div class="queue-placeholder" id="queue-placeholder" aria-label="File queue is empty" data-i18n-aria-label="queueEmptyAria">
+              <span aria-hidden="true"></span>
+              <p><strong data-i18n="queueEmpty">Queue is empty</strong><span data-i18n="queueHint">Added files will appear here.</span></p>
+            </div>
+            <p class="muted" id="queue-summary" role="status" aria-live="polite">
+              Total: 0 · waiting: 0 · uploading: 0 · done: 0 · errors: 0
+            </p>
+            <ol class="upload-queue" id="upload-queue" aria-label="Upload queue" data-i18n-aria-label="uploadQueue"></ol>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <span>PS5 LocalSend</span>
+        <span data-i18n="footer">Device ↔ PS5 · local network · v1.0</span>
+      </footer>
+    </div>
+
+    <p class="sr-only" id="interaction-message" aria-live="polite"></p>
+  </body>
+</html>
